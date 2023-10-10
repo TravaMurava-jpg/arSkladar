@@ -19,27 +19,38 @@
 
     <script>
         // Get the URL parameters and read the QR codes data
-        const urlParams = new URLSearchParams(window.location.search);
-        const qrCodesData = JSON.parse(urlParams.get('qrCodes'));
+const urlParams = new URLSearchParams(window.location.search);
 
-        qrCodesData.forEach((data) => {
-            // Create an a-marker for each QR code
-            const marker = document.createElement('a-marker');
-            marker.setAttribute('type', 'barcode');
-            marker.setAttribute('value', data.code);
+if (!urlParams.has('qrCodes')) {
+    console.log('No qrCodes parameter found in the URL!');
+} else {
+    const qrCodesData = JSON.parse(urlParams.get('qrCodes'));
+    console.log('Parsed QR codes data:', qrCodesData);
 
-            // Add the arrow model for this QR code
-            const arrowEntity = document.createElement('a-entity');
-            arrowEntity.setAttribute('gltf-model', 'scene.gltf');
-            
-            // Set the rotation for the arrow based on the QR code data
-            arrowEntity.setAttribute('rotation', `${data.x} ${data.y} ${data.z}`);
+    qrCodesData.forEach((data, index) => {
+        console.log(`Processing QR code ${index + 1}:`, data);
+        
+        // Create an a-marker for each QR code
+        const marker = document.createElement('a-marker');
+        marker.setAttribute('type', 'barcode');
+        marker.setAttribute('value', data.code);
 
-            marker.appendChild(arrowEntity);
+        // Add the arrow model for this QR code
+        const arrowEntity = document.createElement('a-entity');
+        arrowEntity.setAttribute('gltf-model', 'scene.gltf');
+        
+        // Set the rotation for the arrow based on the QR code data
+        arrowEntity.setAttribute('rotation', `${data.x} ${data.y} ${data.z}`);
+        
+        console.log(`Setting rotation for QR code ${data.code} to:`, arrowEntity.getAttribute('rotation'));
 
-            // Add the marker to the A-Frame scene
-            document.querySelector('a-scene').appendChild(marker);
-        });
+        marker.appendChild(arrowEntity);
+
+        // Add the marker to the A-Frame scene
+        document.querySelector('a-scene').appendChild(marker);
+    });
+}
+
     </script>
 
 </body>
