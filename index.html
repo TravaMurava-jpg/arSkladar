@@ -30,7 +30,7 @@
 
             // Add the arrow model for this QR code
             const arrowEntity = document.createElement('a-entity');
-            arrowEntity.setAttribute('gltf-model', 'arrow.gltf');
+            arrowEntity.setAttribute('gltf-model', 'scene.gltf');
             
             // Set the rotation for the arrow based on the QR code data
             arrowEntity.setAttribute('rotation', `${data.x} ${data.y} ${data.z}`);
