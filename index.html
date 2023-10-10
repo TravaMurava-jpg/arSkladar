@@ -18,35 +18,31 @@
     </a-scene>
 
     <script>
-      // Get the URL parameters and read the barcode data
+     // Get the URL parameters and read the QR codes data
 const urlParams = new URLSearchParams(window.location.search);
 
-if (!urlParams.has('barcodes')) {
-    console.log('No barcodes parameter found in the URL!');
+if (!urlParams.has('qrCodes')) {
+    console.log('No qrCodes parameter found in the URL!');
 } else {
-    const barcodesData = JSON.parse(urlParams.get('barcodes'));
-    console.log('Parsed barcodes data:', barcodesData);
+    const qrCodesData = JSON.parse(urlParams.get('qrCodes'));
+    console.log('Parsed QR codes data:', qrCodesData);
 
-    barcodesData.forEach((data) => {
-        console.log('Processing barcode:', data);
+    qrCodesData.forEach((data) => {
+        console.log('Processing QR code:', data);
         
-        // Create an a-marker for each barcode
+        // Create an a-marker for each QR code
         const marker = document.createElement('a-marker');
-        marker.setAttribute('type', 'barcode');
-        marker.setAttribute('value', data.code);  // barcode number
+        marker.setAttribute('type', 'pattern');
+        marker.setAttribute('url', data.patternURL);  // pointing to the .patt file
 
-        // Add the arrow model for this barcode
+        // Add the arrow model for this QR code
         const arrowEntity = document.createElement('a-entity');
         arrowEntity.setAttribute('gltf-model', 'scene.gltf');
         
-        // Adjust position and scale here
-        arrowEntity.setAttribute('position', '0 0 0');  // Adjust until model is centered on barcode
-        arrowEntity.setAttribute('scale', '1 1 1');     // Adjust scale as needed
-
-        // Set the rotation for the arrow based on the barcode data
+        // Set the rotation for the arrow based on the QR code data
         arrowEntity.setAttribute('rotation', `${data.x} ${data.y} ${data.z}`);
         
-        console.log(`Setting rotation for barcode ${data.code} to:`, arrowEntity.getAttribute('rotation'));
+        console.log(`Setting rotation for QR code with pattern ${data.patternURL} to:`, arrowEntity.getAttribute('rotation'));
 
         marker.appendChild(arrowEntity);
 
