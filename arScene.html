@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Scene with Marker</title>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <!-- Importing AR.js with A-Frame support -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+
+    <a-scene embedded arjs>
+        <!-- Define a marker using pattern -->
+        <a-marker type="pattern" url="./arjs/pattern-marker.patt">
+            <!-- Define the 3D object you want to show. For simplicity, I'm adding a box here. -->
+            <a-box position="0 0.5 0" rotation="0 45 0" color="#4CC3D9"></a-box>
+        </a-marker>
+        <!-- Define the camera -->
+        <a-entity camera></a-entity>
+    </a-scene>
+
+</body>
+
+</html>
