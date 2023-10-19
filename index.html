@@ -67,19 +67,24 @@
         if (Math.abs(difference) > 180) {
             // Handle the case where the compass heading wraps around from 0 to 360 or vice versa
             if (difference > 0) {
-                smoothedCompassHeading -= (360 - difference) * 0.1;
+                smoothedCompassHeading -= (360 - difference) * 0.3;  // increased smoothing factor
             } else {
-                smoothedCompassHeading += (360 + difference) * 0.1;
+                smoothedCompassHeading += (360 + difference) * 0.3;  // increased smoothing factor
             }
         } else {
-            smoothedCompassHeading += difference * 0.1;
+            smoothedCompassHeading += difference * 0.3;  // increased smoothing factor
         }
 
         // Normalize the smoothed compass heading to be in the range [0, 360)
         while (smoothedCompassHeading < 0) smoothedCompassHeading += 360;
         while (smoothedCompassHeading >= 360) smoothedCompassHeading -= 360;
-    }, 50);
+
+        // Update the arrow's rotation based on the smoothed compass heading
+        const rotation = document.getElementById('arrow').getAttribute('rotation').split(' ')[1];
+        document.getElementById('arrow').setAttribute('rotation', `0 ${parseFloat(rotation) + smoothedCompassHeading} 0`);
+    }, 30);  // increased update frequency
 </script>
+
 
 
 </body>
