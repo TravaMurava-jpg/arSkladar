@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AR Scene with Guiding Arrow</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-
 </head>
 
 <body style="margin: 0; overflow: hidden;">
@@ -19,73 +17,44 @@
         <a-entity camera></a-entity>
     </a-scene>
 
-   <script>
-    // Dummy data for testing
-    const qrData = ["1,2,3", "4,5,6", "7,8,9"];
+    <script>
+        // Dummy data for testing
+        const qrData = ["1,2,3", "4,5,6", "7,8,9"];
 
-    let currentTargetIndex = 0;
-    let compassHeading = 0;
-    let smoothedCompassHeading = 0;
+        let currentTargetIndex = 0;
 
-    function rotateArrowToNextTarget() {
-        // Get the next target coordinates from the QR data
-        const targetCoordinates = qrData[currentTargetIndex].split(',').map(Number);
+        function rotateArrowToNextTarget() {
+            // Get the next target coordinates from the QR data
+            const targetCoordinates = qrData[currentTargetIndex].split(',').map(Number);
 
-        // Calculate the rotation needed to point the arrow towards the target coordinates
-        const rotation = calculateRotation(targetCoordinates);
+            // Calculate the rotation needed to point the arrow towards the target coordinates
+            const rotation = calculateRotation(targetCoordinates);
 
-        // Update the arrow's rotation
-        document.getElementById('arrow').setAttribute('rotation', rotation);
+            // Update the arrow's rotation
+            document.getElementById('arrow').setAttribute('rotation', rotation);
 
-        // Update the index for the next target
-        currentTargetIndex = (currentTargetIndex + 1) % qrData.length;
-    }
-
-    function calculateRotation(targetCoordinates) {
-        // TODO: Implement the logic to calculate the rotation needed to point the arrow towards the target coordinates
-        // This will depend on your specific scene setup and coordinate system.
-        // For now, just returning a dummy rotation.
-        const rotation = '0 45 0';
-
-        // Adjust the rotation based on the smoothed compass heading
-        const adjustedRotation = `${rotation.split(' ')[0]} ${parseFloat(rotation.split(' ')[1]) + smoothedCompassHeading} ${rotation.split(' ')[2]}`;
-
-        return adjustedRotation;
-    }
-
-    // For testing, rotate the arrow to the next target every 3 seconds
-    setInterval(rotateArrowToNextTarget, 3000);
-
-    // Listen to the deviceorientation event to get the compass heading
-    window.addEventListener('deviceorientation', (event) => {
-        compassHeading = event.webkitCompassHeading || event.compassHeading;
-    });
-
-    // Smooth the compass heading values
-    setInterval(() => {
-        const difference = compassHeading - smoothedCompassHeading;
-        if (Math.abs(difference) > 180) {
-            // Handle the case where the compass heading wraps around from 0 to 360 or vice versa
-            if (difference > 0) {
-                smoothedCompassHeading -= (360 - difference) * 0.3;  // increased smoothing factor
-            } else {
-                smoothedCompassHeading += (360 + difference) * 0.3;  // increased smoothing factor
-            }
-        } else {
-            smoothedCompassHeading += difference * 0.3;  // increased smoothing factor
+            // Update the index for the next target
+            currentTargetIndex = (currentTargetIndex + 1) % qrData.length;
         }
 
-        // Normalize the smoothed compass heading to be in the range [0, 360)
-        while (smoothedCompassHeading < 0) smoothedCompassHeading += 360;
-        while (smoothedCompassHeading >= 360) smoothedCompassHeading -= 360;
+        function calculateRotation(targetCoordinates) {
+            // TODO: Implement the logic to calculate the rotation needed to point the arrow towards the target coordinates
+            // This will depend on your specific scene setup and coordinate system.
+            // For now, just returning a dummy rotation.
+            return '0 45 0';
+        }
 
-        // Update the arrow's rotation based on the smoothed compass heading
-        const rotation = document.getElementById('arrow').getAttribute('rotation').split(' ')[1];
-        document.getElementById('arrow').setAttribute('rotation', `0 ${parseFloat(rotation) + smoothedCompassHeading} 0`);
-    }, 30);  // increased update frequency
-</script>
+        function update() {
+            // Rotate the arrow to the next target
+            rotateArrowToNextTarget();
 
+            // Request the next animation frame
+            requestAnimationFrame(update);
+        }
 
+        // Start the continuous updating
+        update();
+    </script>
 
 </body>
 
