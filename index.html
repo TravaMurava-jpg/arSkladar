@@ -38,12 +38,25 @@
             currentTargetIndex = (currentTargetIndex + 1) % qrData.length;
         }
 
-        function calculateRotation(targetCoordinates) {
-            // TODO: Implement the logic to calculate the rotation needed to point the arrow towards the target coordinates
-            // This will depend on your specific scene setup and coordinate system.
-            // For now, just returning a dummy rotation.
-            return '0 45 0';
-        }
+       function calculateRotation(targetCoordinates) {
+    // Dummy values for the arrow's current position
+    const arrowX = 0;
+    const arrowY = 0;
+    const arrowZ = 0;
+
+    // Calculate the direction vector from the arrow to the target
+    const directionX = targetCoordinates[0] - arrowX;
+    const directionY = targetCoordinates[1] - arrowY;
+    const directionZ = targetCoordinates[2] - arrowZ;
+
+    // Calculate the rotation angles
+    const rotationX = Math.atan2(directionZ, directionY) * (180 / Math.PI);
+    const rotationY = Math.atan2(directionZ, directionX) * (180 / Math.PI);
+    const rotationZ = Math.atan2(directionY, directionX) * (180 / Math.PI);
+
+    return `${rotationX} ${rotationY} ${rotationZ}`;
+}
+
 
         function update() {
             // Rotate the arrow to the next target
