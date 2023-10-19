@@ -20,35 +20,46 @@
     </a-scene>
 
     <script>
-        // Dummy data for testing
-        const qrData = ["1,2,3", "4,5,6", "7,8,9"];
+    // Dummy data for testing
+    const qrData = ["1,2,3", "4,5,6", "7,8,9"];
 
-        let currentTargetIndex = 0;
+    let currentTargetIndex = 0;
+    let compassHeading = 0;
 
-        function rotateArrowToNextTarget() {
-            // Get the next target coordinates from the QR data
-            const targetCoordinates = qrData[currentTargetIndex].split(',').map(Number);
+    function rotateArrowToNextTarget() {
+        // Get the next target coordinates from the QR data
+        const targetCoordinates = qrData[currentTargetIndex].split(',').map(Number);
 
-            // Calculate the rotation needed to point the arrow towards the target coordinates
-            const rotation = calculateRotation(targetCoordinates);
+        // Calculate the rotation needed to point the arrow towards the target coordinates
+        const rotation = calculateRotation(targetCoordinates);
 
-            // Update the arrow's rotation
-            document.getElementById('arrow').setAttribute('rotation', rotation);
+        // Update the arrow's rotation
+        document.getElementById('arrow').setAttribute('rotation', rotation);
 
-            // Update the index for the next target
-            currentTargetIndex = (currentTargetIndex + 1) % qrData.length;
-        }
+        // Update the index for the next target
+        currentTargetIndex = (currentTargetIndex + 1) % qrData.length;
+    }
 
-        function calculateRotation(targetCoordinates) {
-            // TODO: Implement the logic to calculate the rotation needed to point the arrow towards the target coordinates
-            // This will depend on your specific scene setup and coordinate system.
-            // For now, just returning a dummy rotation.
-            return '0 45 0';
-        }
+    function calculateRotation(targetCoordinates) {
+        // TODO: Implement the logic to calculate the rotation needed to point the arrow towards the target coordinates
+        // This will depend on your specific scene setup and coordinate system.
+        // For now, just returning a dummy rotation.
+        const rotation = '0 45 0';
 
-        // For testing, rotate the arrow to the next target every 3 seconds
-        setInterval(rotateArrowToNextTarget, 3000);
-    </script>
+        // Adjust the rotation based on the compass heading
+        const adjustedRotation = `${rotation.split(' ')[0]} ${parseFloat(rotation.split(' ')[1]) + compassHeading} ${rotation.split(' ')[2]}`;
+
+        return adjustedRotation;
+    }
+
+    // For testing, rotate the arrow to the next target every 3 seconds
+    setInterval(rotateArrowToNextTarget, 3000);
+
+    // Listen to the deviceorientation event to get the compass heading
+    window.addEventListener('deviceorientation', (event) => {
+        compassHeading = event.webkitCompassHeading || event.compassHeading;
+    });
+</script>
 
 </body>
 
