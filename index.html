@@ -19,12 +19,13 @@
         <a-entity camera></a-entity>
     </a-scene>
 
-    <script>
+   <script>
     // Dummy data for testing
     const qrData = ["1,2,3", "4,5,6", "7,8,9"];
 
     let currentTargetIndex = 0;
     let compassHeading = 0;
+    let smoothedCompassHeading = 0;
 
     function rotateArrowToNextTarget() {
         // Get the next target coordinates from the QR data
@@ -46,8 +47,8 @@
         // For now, just returning a dummy rotation.
         const rotation = '0 45 0';
 
-        // Adjust the rotation based on the compass heading
-        const adjustedRotation = `${rotation.split(' ')[0]} ${parseFloat(rotation.split(' ')[1]) + compassHeading} ${rotation.split(' ')[2]}`;
+        // Adjust the rotation based on the smoothed compass heading
+        const adjustedRotation = `${rotation.split(' ')[0]} ${parseFloat(rotation.split(' ')[1]) + smoothedCompassHeading} ${rotation.split(' ')[2]}`;
 
         return adjustedRotation;
     }
@@ -59,7 +60,27 @@
     window.addEventListener('deviceorientation', (event) => {
         compassHeading = event.webkitCompassHeading || event.compassHeading;
     });
+
+    // Smooth the compass heading values
+    setInterval(() => {
+        const difference = compassHeading - smoothedCompassHeading;
+        if (Math.abs(difference) > 180) {
+            // Handle the case where the compass heading wraps around from 0 to 360 or vice versa
+            if (difference > 0) {
+                smoothedCompassHeading -= (360 - difference) * 0.1;
+            } else {
+                smoothedCompassHeading += (360 + difference) * 0.1;
+            }
+        } else {
+            smoothedCompassHeading += difference * 0.1;
+        }
+
+        // Normalize the smoothed compass heading to be in the range [0, 360)
+        while (smoothedCompassHeading < 0) smoothedCompassHeading += 360;
+        while (smoothedCompassHeading >= 360) smoothedCompassHeading -= 360;
+    }, 50);
 </script>
+
 
 </body>
 
